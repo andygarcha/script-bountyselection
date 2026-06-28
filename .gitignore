@@ -183,3 +183,4 @@ cython_debug/
 *.json
 !unlistedgames.json
 *.xlsx
+*.txt

@@ -306,7 +306,7 @@ def extract():
 def output():
     """
     Reads selection.json and formats entries into Discord messages (≤2000 chars each).
-    Lines are never split across messages. Saves all messages to output.json.
+    Lines are never split across messages. Saves each message as output01.txt, output02.txt, etc.
     """
     import json
 
@@ -381,12 +381,13 @@ def output():
     if current_parts:
         messages.append("\n".join(current_parts))
 
-    with open("output.json", "w") as f:
-        json.dump(messages, f, indent=2)
-
-    print(f"Done. {len(messages)} message(s) written to output.json.")
     for i, msg in enumerate(messages, 1):
-        print(f"  Message {i}: {len(msg)} chars")
+        filename = f"output{i:02d}.txt"
+        with open(filename, "w") as f:
+            f.write(msg)
+        print(f"  {filename}: {len(msg)} chars")
+
+    print(f"Done. {len(messages)} message(s) written to output01.txt ... output{len(messages):02d}.txt")
 
 
 def verify_extract():

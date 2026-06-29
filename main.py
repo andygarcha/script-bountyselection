@@ -39,6 +39,7 @@ if len(sys.argv) > 2:
 POTENTIALS_SHEET = "https://docs.google.com/spreadsheets/d/1NeWYzeRi7NDrm9jvJKZgjrB6LLSjKskD3yNO0SYOVpk/edit"
 RETRO_SHEET = "https://docs.google.com/spreadsheets/d/1g_7GlGYtz0l4EV_WfWdhslcfYcUZph2-8G4lbHvF214/edit"
 
+# -- number of games ------------
 CATEGORY_POTENTIALS_STEAM = 7
 CATEGORY_POTENTIALS_RETRO = 3
 CATEGORY_LOW_CLEAR_T1 = 3
@@ -48,6 +49,16 @@ CATEGORY_LOW_CLEAR_T4 = 1
 CATEGORY_LOW_CLEAR_T5PLUS = 1
 CATEGORY_UNCLEARED_PO = 2
 CATEGORY_UNCLEARED_SO = 1
+
+# -- bounty point worth ---------
+BOUNTY_POINTS_POTENTIAL = 3
+BOUNTY_POINTS_LOW_CLEAR_T1 = 2
+BOUNTY_POINTS_LOW_CLEAR_T2 = 4
+BOUNTY_POINTS_LOW_CLEAR_T3 = 8
+BOUNTY_POINTS_LOW_CLEAR_T4 = 16
+BOUNTY_POINTS_LOW_CLEAR_T5PLUS = 32
+BOUNTY_POINTS_UNCLEARED_OBJECTIVE = 10
+
 
 def pull():
     """
@@ -330,10 +341,11 @@ def output():
 
     def format_entry(e: dict) -> str:
         price = price_str(e)
+        bp = e.get("bountyPoints", "X")
         if e.get("platform") == "steam" and e.get("platformId"):
             url = steam_url(e["platformId"])
-            return f"{e['gameName']} - X bp - {price} - {url}"
-        return f"{e['gameName']} - X bp - {price}"
+            return f"{e['gameName']} - {bp} bp - {price} - {url}"
+        return f"{e['gameName']} - {bp} bp - {price}"
 
     # Build an ordered list of lines grouped by category and type
     lines: list[str] = []
@@ -505,6 +517,26 @@ def select():
     for entry in selected:
         entry["basePrice"] = None
         entry["currentPrice"] = None
+
+        bp = -1
+        match(entry['type']):
+            case "Low Clear":
+                match(entry['lowClearTier']):
+                    case 1:
+                        bp = BOUNTY_POINTS_LOW_CLEAR_T1
+                    case 2:
+                        bp = BOUNTY_POINTS_LOW_CLEAR_T2
+                    case 3:
+                        bp = BOUNTY_POINTS_LOW_CLEAR_T3
+                    case 4:
+                        bp = BOUNTY_POINTS_LOW_CLEAR_T4
+                    case 5:
+                        bp = BOUNTY_POINTS_LOW_CLEAR_T5PLUS
+            case "Uncleared":
+                bp = BOUNTY_POINTS_UNCLEARED_OBJECTIVE
+            case "Potential":
+                bp = BOUNTY_POINTS_POTENTIAL
+        entry["bountyPoints"] = bp
 
     with open("selection.json", "w") as f:
         json.dump(selected, f, indent=2)

@@ -329,12 +329,20 @@ def output():
 
     def steam_url(platform_id: str) -> str:
         return f"https://store.steampowered.com/app/{platform_id}/"
+    def retro_url(platform_id: str) -> str:
+        return f"https://retroachievements.org/game/{platform_id}/"
 
     def price_str(entry: dict) -> str:
         base = entry.get("basePrice")
         current = entry.get("currentPrice")
         if not current or current == "UNLISTED":
-            return base if base and base != "UNLISTED" else "?"
+            if base and base != "UNLISTED":
+                return base
+            if entry['platform'] == 'steam':
+                return 'Free!'
+            if entry['platform'] == 'retroachievements':
+                return 'No price'
+            return '?'
         if base and base != current:
             return f"{current} (base {base})"
         return current
@@ -344,6 +352,9 @@ def output():
         bp = e.get("bountyPoints", "X")
         if e.get("platform") == "steam" and e.get("platformId"):
             url = steam_url(e["platformId"])
+            return f"{e['gameName']} - {bp} bp - {price} - {url}"
+        elif e.get("platform") == "retroachievements" and e.get("platformId"):
+            url= retro_url(e["platformId"])
             return f"{e['gameName']} - {bp} bp - {price} - {url}"
         return f"{e['gameName']} - {bp} bp - {price}"
 

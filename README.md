@@ -1,7 +1,7 @@
 # script-bountyselection
 Selects bounties from google sheets for the CE community.
 
-# Hi Brooks.
+# Hi Apollo.
 I made this script. You are super duper welcome. 
 
 ## Too long and I hate you
@@ -26,7 +26,7 @@ python main.py all
 ```
 
 ## I care about our friendship Andy
-Well thank you brooks! I'd love to explain this script to you. To reduce redundant issues, I've broken this down into multiple parts. Here's how this all works:
+Well thank you apollo! I'd love to explain this script to you. To reduce redundant issues, I've broken this down into multiple parts. Here's how this all works:
 1. `pull`. This will pull the `.xlsx` files from the 'Potentials' and 'Retro Potentials' sheets, and saves them to `potentials.xlsx` and `retro.xlsx`. This way:
     - You aren't waiting on a multi-MB-sized request *every time*
     - After the first pull, you don't have to be internet connected to do this.

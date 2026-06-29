@@ -328,9 +328,9 @@ def output():
         entries = json.load(f)
 
     def steam_url(platform_id: str) -> str:
-        return f"https://store.steampowered.com/app/{platform_id}/"
+        return f"<https://store.steampowered.com/app/{platform_id}/>"
     def retro_url(platform_id: str) -> str:
-        return f"https://retroachievements.org/game/{platform_id}/"
+        return f"<https://retroachievements.org/game/{platform_id}/>"
 
     def price_str(entry: dict) -> str:
         base = entry.get("basePrice")

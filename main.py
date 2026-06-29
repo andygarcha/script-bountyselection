@@ -316,12 +316,14 @@ def extract():
 
 def output():
     """
-    Reads selection.json and formats entries into Discord messages (≤2000 chars each).
+    Reads selection.json and formats entries into Discord messages (<= 1800 chars each).
     Lines are never split across messages. Saves each message as output01.txt, output02.txt, etc.
+
+    NOTE: technically it's 2000 but i leave in 200 extra characters to put in notes
     """
     import json
 
-    DISCORD_LIMIT = 2000
+    DISCORD_LIMIT = 1800
     CATEGORIES = ["Action", "Arcade", "Bullet Hell", "First-Person", "Platformer", "Strategy"]
 
     with open("selection.json") as f:
@@ -331,6 +333,8 @@ def output():
         return f"<https://store.steampowered.com/app/{platform_id}/>"
     def retro_url(platform_id: str) -> str:
         return f"<https://retroachievements.org/game/{platform_id}/>"
+    def ce_url(ce_id: str) -> str:
+        return f"<https://cedb.me/game/{ce_id}/>"
 
     def price_str(entry: dict) -> str:
         base = entry.get("basePrice")
@@ -350,6 +354,10 @@ def output():
     def format_entry(e: dict) -> str:
         price = price_str(e)
         bp = e.get("bountyPoints", "X")
+        if e['type'] == 'Uncleared':
+            name = f'{e['objectiveType'][0]}O \'{e['objectiveName']}\' - {e['gameName']}'
+            url = ce_url(e['ceId'])
+            return f"{name} - {bp} bp - {price} - {url}"
         if e.get("platform") == "steam" and e.get("platformId"):
             url = steam_url(e["platformId"])
             return f"{e['gameName']} - {bp} bp - {price} - {url}"

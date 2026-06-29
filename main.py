@@ -121,7 +121,7 @@ def extract():
             "type": "Uncleared",
             "lowClearTier": None,
             "gameName": u["gameName"],
-            "ceId": u["objectiveCeId"],
+            "ceId": u["gameCeId"],
             "objectiveName": u["objectiveName"],
             "objectiveCeId": u["objectiveCeId"],
             "objectiveType": u["type"],  # "Primary" or "Secondary"
@@ -219,7 +219,7 @@ def extract():
                 "type": "Low Clear",
                 "lowClearTier": tier,
                 "gameName": game_name,
-                "ceId": None,
+                "ceId": ce_game_id,
                 "objectiveName": None,
                 "objectiveCeId": None,
             })
@@ -322,6 +322,11 @@ def output():
     NOTE: technically it's 2000 but i leave in 200 extra characters to put in notes
     """
     import json
+    import glob
+    import os
+
+    for f in glob.glob("output*.txt"):
+        os.remove(f)
 
     DISCORD_LIMIT = 1800
     CATEGORIES = ["Action", "Arcade", "Bullet Hell", "First-Person", "Platformer", "Strategy"]
@@ -345,7 +350,7 @@ def output():
             if entry['platform'] == 'steam':
                 return 'Free!'
             if entry['platform'] == 'retroachievements':
-                return 'No price'
+                return '(retro)'
             return '?'
         if base and base != current:
             return f"{current} (base {base})"
@@ -358,6 +363,9 @@ def output():
             name = f'{e['objectiveType'][0]}O \'{e['objectiveName']}\' - {e['gameName']}'
             url = ce_url(e['ceId'])
             return f"{name} - {bp} bp - {price} - {url}"
+        if e['type'] == 'Low Clear':
+            url = ce_url(e['ceId'])
+            return f"{e['gameName']} - {bp} bp - {price} - {url}"
         if e.get("platform") == "steam" and e.get("platformId"):
             url = steam_url(e["platformId"])
             return f"{e['gameName']} - {bp} bp - {price} - {url}"

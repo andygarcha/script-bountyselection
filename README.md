@@ -26,7 +26,7 @@ python main.py all
 ```
 
 ## I care about our friendship Andy
-Well thank you brooks! To reduce redundant issues, I've broken this down into multiple parts. Here's how this all works:
+Well thank you brooks! I'd love to explain this script to you. To reduce redundant issues, I've broken this down into multiple parts. Here's how this all works:
 1. `pull`. This will pull the `.xlsx` files from the 'Potentials' and 'Retro Potentials' sheets, and saves them to `potentials.xlsx` and `retro.xlsx`. This way:
     - You aren't waiting on a multi-MB-sized request *every time*
     - After the first pull, you don't have to be internet connected to do this.
@@ -38,3 +38,8 @@ Well thank you brooks! To reduce redundant issues, I've broken this down into mu
 > Also, if you'd like to change *how much each bounty is worth*, you can similarly adjust the constants near the top of `main.py`.
 5. `selectdata`. This pulls down price information from the steam games. I probably could have left this in `select`, but since it was internet related, I thought it best to separate this out.
 6. `output`. This writes the information about the selected bounties to a bunch of `.txt` files. This *was* all in a nice `.json` file, but this is just easier for you, and the `.json` file wasn't being nice with line breaks.
+
+I also included some shortcuts.
+- `pull+` runs `pull` and `pullce`
+- `select+` runs `select` and `selectdata`
+- `all` runs everything.
